@@ -2,157 +2,136 @@
 
 @push('styles')
 <style>
-    /* Kustomisasi Kartu Kategori */
+    /* === Warna dengan gradasi solid === */
+    .bg-card-orange { background: linear-gradient(135deg, #f39c12, #f1c40f) !important; color: #fff !important; }
+    .bg-card-yellow { background: linear-gradient(135deg, #f1c40f, #f9e79f) !important; color: #000 !important; }
+    .bg-card-green  { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; color: #fff !important; }
+    .bg-card-blue   { background: linear-gradient(135deg, #2980b9, #3498db) !important; color: #fff !important; }
+    .bg-card-purple { background: linear-gradient(135deg, #8e44ad, #9b59b6) !important; color: #fff !important; }
+    .bg-card-gray   { background: linear-gradient(135deg, #7f8c8d, #95a5a6) !important; color: #fff !important; }
+
+    /* === Kustomisasi Kartu === */
     .category-card {
         border: none;
         border-radius: 0.75rem;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         transition: all 0.3s ease;
+        overflow: hidden;
     }
     .category-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
     }
 
-    /* Warna header kartu dinamis */
-    .category-card .card-header {
-        border-top-left-radius: 0.75rem;
-        border-top-right-radius: 0.75rem;
-        padding: 1rem 1.25rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 0;
-        color: #fff; /* Teks putih */
+    .category-card h5,
+    .category-card p,
+    .category-card .stat-label,
+    .category-card .stat-number {
+        color: inherit !important;
     }
 
-    .bg-card-orange { background-color: #F39C12; }
-    .bg-card-yellow { background-color: #F1C40F; }
-    .bg-card-green { background-color: #2ECC71; }
-    .bg-card-blue { background-color: #3498DB; }
-    .bg-card-purple { background-color: #9B59B6; }
-    .bg-card-gray { background-color: #95A5A6; }
-
-    .category-card .card-title {
-        font-weight: 600;
-        margin-bottom: 0;
-    }
+    /* CSS untuk angka statistik di kartu */
+    .stat-item { text-align: center; }
+    .stat-number { font-size: 1.5rem; font-weight: 700; display: block; }
+    .stat-label { font-size: 0.8rem; text-transform: uppercase; display: block; opacity: 0.9; }
 
     .badge-status {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         font-weight: 600;
         padding: 0.3em 0.6em;
         border-radius: 0.25rem;
-    }
-    .badge-aktif {
-        background-color: rgba(255, 255, 255, 0.25);
+        background-color: rgba(255,255,255,0.25);
         color: #fff;
     }
-    .badge-nonaktif {
-        background-color: rgba(0, 0, 0, 0.2);
-        color: #f0f0f0;
+    /* Khusus untuk .bg-card-yellow yang teksnya hitam */
+    .bg-card-yellow .badge-status {
+        background-color: rgba(0,0,0,0.1);
+        color: #000;
+    }
+    .bg-card-yellow .stat-number,
+    .bg-card-yellow .stat-label {
+        color: #000 !important;
     }
 
-    .stat-item {
-        text-align: center;
-    }
-    .stat-item .stat-number {
-        font-size: 1.25rem;
+
+    .btn-action-edit, .btn-action-hapus {
+        background-color: rgba(255,255,255,0.9);
         font-weight: 600;
-        display: block;
     }
-    .stat-item .stat-label {
-        font-size: 0.8rem;
-        color: #6c757d;
-    }
-
-    .btn-action-edit {
-        background-color: #EBF5FF;
-        color: #0D6EFD;
-    }
-    .btn-action-edit:hover {
-        background-color: #cfe2ff;
-    }
-    .btn-action-hapus {
-        background-color: #FFF0F1;
-        color: #DC3545;
-    }
-    .btn-action-hapus:hover {
-        background-color: #fce1e3;
+    /* Khusus untuk .bg-card-yellow */
+    .bg-card-yellow .btn-action-edit,
+    .bg-card-yellow .btn-action-hapus {
+        background-color: rgba(0,0,0,0.1);
     }
 
-    .stat-card-top .card-body {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    .btn-action-edit { color: #0D6EFD; }
+    .btn-action-hapus { color: #DC3545; }
+    .btn-action-edit:hover, .btn-action-hapus:hover {
+        opacity: 0.85;
     }
-    .stat-card-top .stat-icon {
-        font-size: 2.5rem;
-        padding: 1rem;
-        border-radius: 50%;
-        background-color: #f4f4f4;
+
+    /* === Header === */
+    .page-header {
+        color: #fff;
+        background: linear-gradient(90deg, #2563eb, #06b6d4);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1.5rem;
     }
 </style>
 @endpush
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="page-header d-flex justify-content-between align-items-center">
     <div>
-        <h2 class="h3 mb-1 text-white fw-bold">Kategori Pengaduan</h2>
-        <p class="mb-0 text-white-50">Kelola kategori untuk mengorganisir pengaduan di sistem.</p>
+        <h2 class="h4 fw-bold mb-1">Manajemen Kategori Pengaduan</h2>
+        <p class="mb-0 text-white-50">Kelola kategori untuk mengorganisir pengaduan di sistem Jari – Jaga Kendari</p>
     </div>
-    <div>
-        <a href="{{ route('admin.kategori.create') }}" class="btn btn-light shadow-sm">
-            <i class="bi bi-plus-circle-fill me-2"></i>
-            Tambah Kategori
-        </a>
-    </div>
+    {{-- TOMBOL INI DIUBAH UNTUK MEMBUKA MODAL TAMBAH --}}
+    <button type="button" class="btn btn-light shadow-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
+        <i class="bi bi-plus-circle-fill me-2"></i> Tambah Kategori
+    </button>
 </div>
 
+{{-- Statistik --}}
 <div class="row g-4 mb-4">
     <div class="col-md-4">
-        <div class="card shadow-sm border-0 stat-card-top">
-            <div class="card-body">
+        <div class="card shadow-sm border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
-                    <h5 class="card-title text-muted small mb-1">Total Kategori</h5>
-                    <p class="card-text fs-2 fw-bold mb-0">{{ $total_kategori }}</p>
+                    <h6 class="text-muted mb-1">Total Kategori</h6>
+                    <h4 class="fw-bold mb-0">{{ $total_kategori ?? 6 }}</h4> {{-- Ganti dengan var aslimu --}}
                 </div>
-                <div class="stat-icon text-primary bg-primary-subtle">
-                    <i class="bi bi-tags-fill"></i>
-                </div>
+                <i class="bi bi-tags-fill fs-2 text-primary"></i>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card shadow-sm border-0 stat-card-top">
-            <div class="card-body">
+        <div class="card shadow-sm border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
-                    <h5 class="card-title text-muted small mb-1">Kategori Aktif</h5>
-                    <p class="card-text fs-2 fw-bold mb-0">{{ $total_aktif }}</p>
+                    <h6 class="text-muted mb-1">Aktif</h6>
+                    <h4 class="fw-bold mb-0 text-success">{{ $total_aktif ?? 5 }}</h4> {{-- Ganti dengan var aslimu --}}
                 </div>
-                <div class="stat-icon text-success bg-success-subtle">
-                    <i class="bi bi-check-circle-fill"></i>
-                </div>
+                <i class="bi bi-check-circle-fill fs-2 text-success"></i>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card shadow-sm border-0 stat-card-top">
-            <div class="card-body">
+        <div class="card shadow-sm border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
-                    <h5 class="card-title text-muted small mb-1">Kategori Non-Aktif</h5>
-                    <p class="card-text fs-2 fw-bold mb-0">{{ $total_nonaktif }}</p>
+                    <h6 class="text-muted mb-1">Non-Aktif</h6>
+                    <h4 class="fw-bold mb-0 text-danger">{{ $total_nonaktif ?? 1 }}</h4> {{-- Ganti dengan var aslimu --}}
                 </div>
-                <div class="stat-icon text-danger bg-danger-subtle">
-                    <i class="bi bi-x-circle-fill"></i>
-                </div>
+                <i class="bi bi-x-circle-fill fs-2 text-danger"></i>
             </div>
         </div>
     </div>
 </div>
 
-{{-- FILTER --}}
+{{-- Filter --}}
 <div class="card shadow-sm border-0 mb-4">
     <div class="card-body">
         <form action="{{ route('admin.kategori.index') }}" method="GET">
@@ -179,52 +158,207 @@
     </div>
 </div>
 
-{{-- DAFTAR KATEGORI --}}
+{{-- Daftar Kategori --}}
 <div class="row g-4">
     @forelse($kategori_list as $kategori)
         <div class="col-md-6 col-lg-4">
-            <div class="card category-card h-100">
-                <div class="card-header {{ $kategori->warna_kelas ?? 'bg-card-gray' }}">
-                    <h5 class="card-title">{{ $kategori->nama_kategori }}</h5>
-                    @if($kategori->status == 'aktif')
-                        <span class="badge-status badge-aktif">AKTIF</span>
-                    @else
-                        <span class="badge-status badge-nonaktif">NON-AKTIF</span>
-                    @endif
-                </div>
-                <div class="card-body">
-                    <p class="card-text text-muted small mb-3">
-                        {{ $kategori->deskripsi ?? 'Tidak ada deskripsi.' }}
-                    </p>
-                    <hr class="my-3">
-                    <div class="d-flex justify-content-around">
+            <div class="card category-card h-100 {{ $kategori->warna_kelas ?? 'bg-card-gray' }}">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="fw-bold mb-0">{{ $kategori->nama_kategori }}</h5>
+                        <span class="badge-status">{{ strtoupper($kategori->status) }}</span>
+                    </div>
+
+                    <p class="small mb-3">{{ $kategori->deskripsi ?? 'Tidak ada deskripsi.' }}</p>
+
+                    <div class="d-flex justify-content-around mb-3">
                         <div class="stat-item">
                             <span class="stat-number">{{ $kategori->total_laporan ?? 0 }}</span>
                             <span class="stat-label">Total</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-number text-success">{{ $kategori->laporan_selesai ?? 0 }}</span>
+                            <span class="stat-number">{{ $kategori->laporan_selesai ?? 0 }}</span>
                             <span class="stat-label">Selesai</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-number text-primary">{{ $kategori->laporan_proses ?? 0 }}</span>
+                            <span class="stat-number">{{ $kategori->laporan_proses ?? 0 }}</span>
                             <span class="stat-label">Proses</span>
                         </div>
+                    </div>
+
+                    <div class="mt-auto d-flex gap-2">
+                        <button
+                            type="button"
+                            class="btn btn-action-edit w-100 btn-edit-kategori"
+                            data-id="{{ $kategori->id }}"
+                            data-nama="{{ $kategori->nama_kategori }}"
+                            data-deskripsi="{{ $kategori->deskripsi }}"
+                            data-warna="{{ $kategori->warna_kelas }}"
+                            data-status="{{ $kategori->status }}">
+                            <i class="bi bi-pencil-square me-1"></i> Edit
+                        </button>
+
+                        <form action="{{ route('admin.kategori.destroy', $kategori->id) }}" method="POST" class="w-100" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-action-hapus w-100">
+                                <i class="bi bi-trash3 me-1"></i> Hapus
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     @empty
         <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center p-5">
-                    <i class="bi bi-search fs-1 text-muted"></i>
-                    <h4 class="mt-3">Data Tidak Ditemukan</h4>
-                    <p class="text-muted">Tidak ada kategori yang sesuai dengan filter Anda.</p>
-                </div>
+            <div class="card shadow-sm border-0 text-center p-5">
+                <i class="bi bi-search fs-1 text-muted"></i>
+                <h4 class="mt-3">Data Tidak Ditemukan</h4>
+                <p class="text-muted">Tidak ada kategori yang sesuai dengan filter Anda.</p>
             </div>
         </div>
     @endforelse
 </div>
+
+
+{{-- ====================================================================== --}}
+{{-- ======================== MODAL TAMBAH & EDIT ======================= --}}
+{{-- ====================================================================== --}}
+
+
+<div class="modal fade" id="tambahKategoriModal" tabindex="-1" aria-labelledby="tambahKategoriModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tambahKategoriModalLabel">Tambah Kategori Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('admin.kategori.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nama_kategori" class="form-label">Nama Kategori</label>
+                        <input type="text" class="form-control" id="nama_kategori" name="nama_kategori" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
+                    </div>
+
+                    {{-- INI BAGIAN PENTING (WARNA) --}}
+                    <div class="mb-3">
+                        <label for="warna_kelas" class="form-label">Warna Kartu</label>
+                        <select class="form-select" id="warna_kelas" name="warna_kelas">
+                            <option value="bg-card-orange">Oranye (Jalan Rusak)</option>
+                            <option value="bg-card-yellow">Kuning (Lampu Jalan)</option>
+                            <option value="bg-card-green">Hijau (Kebersihan)</option>
+                            <option value="bg-card-blue">Biru (Fasilitas Umum)</option>
+                            <option value="bg-card-purple">Ungu (Drainase)</option>
+                            <option value="bg-card-gray" selected>Abu-abu (Lainnya)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="aktif" selected>Aktif</option>
+                            <option value="nonaktif">Non-Aktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editKategoriModal" tabindex="-1" aria-labelledby="editKategoriModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editKategoriModalLabel">Edit Kategori</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            {{-- Form ini akan diisi oleh JavaScript --}}
+            <form id="formEditKategori" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit_nama_kategori" class="form-label">Nama Kategori</label>
+                        <input type="text" class="form-control" id="edit_nama_kategori" name="nama_kategori" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="3"></textarea>
+                    </div>
+
+                    {{-- INI BAGIAN PENTING (WARNA) --}}
+                    <div class="mb-3">
+                        <label for="edit_warna_kelas" class="form-label">Warna Kartu</label>
+                        <select class="form-select" id="edit_warna_kelas" name="warna_kelas">
+                            <option value="bg-card-orange">Oranye (Jalan Rusak)</option>
+                            <option value="bg-card-yellow">Kuning (Lampu Jalan)</option>
+                            <option value="bg-card-green">Hijau (Kebersihan)</option>
+                            <option value="bg-card-blue">Biru (Fasilitas Umum)</option>
+                            <option value="bg-card-purple">Ungu (Drainase)</option>
+                            <option value="bg-card-gray">Abu-abu (Lainnya)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_status" class="form-label">Status</label>
+                        <select class="form-select" id="edit_status" name="status">
+                            <option value="aktif">Aktif</option>
+                            <option value="nonaktif">Non-Aktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@push('scripts')
+{{-- Ini script asli dari file kamu, sudah benar --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.btn-edit-kategori');
+    const formEdit = document.getElementById('formEditKategori');
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const nama = this.dataset.nama;
+            const deskripsi = this.dataset.deskripsi;
+            const warna = this.dataset.warna;
+            const status = this.dataset.status;
+
+            // Mengatur action form dengan URL update yang benar
+            formEdit.action = `{{ route('admin.kategori.update', ':id') }}`.replace(':id', id);
+
+            // Mengisi nilai-nilai form
+            document.getElementById('edit_nama_kategori').value = nama;
+            document.getElementById('edit_deskripsi').value = deskripsi;
+            document.getElementById('edit_warna_kelas').value = warna;
+            document.getElementById('edit_status').value = status;
+
+            // Menampilkan modal
+            const modal = new bootstrap.Modal(document.getElementById('editKategoriModal'));
+            modal.show();
+        });
+    });
+});
+</script>
+@endpush
 
 @endsection

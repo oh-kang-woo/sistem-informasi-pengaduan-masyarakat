@@ -54,7 +54,6 @@ class KategoriController extends Controller
         ));
     }
 
-
     /**
      * Menampilkan form tambah kategori.
      */
@@ -79,5 +78,34 @@ class KategoriController extends Controller
 
         return redirect()->route('admin.kategori.index')
             ->with('success', 'Kategori berhasil ditambahkan.');
+    }
+
+
+        public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'nama_kategori' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'warna_kelas' => 'required|string|max:100',
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        $kategori = Kategori::findOrFail($id);
+        $kategori->update($validated);
+
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+
+    /**
+     * Menghapus kategori berdasarkan ID.
+     */
+    public function destroy($id)
+    {
+        $kategori = Kategori::findOrFail($id);
+        $kategori->delete();
+
+        return redirect()->route('admin.kategori.index')
+            ->with('success', 'Kategori berhasil dihapus.');
     }
 }

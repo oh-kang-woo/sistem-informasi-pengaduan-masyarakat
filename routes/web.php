@@ -18,7 +18,7 @@ Route::get('/admin/pengaduan', [PengaduanAdminController::class, 'index'])->name
 
 
 
-Route::prefix('admin')->group(function () {
+
     Route::get('/kategori', [KategoriController::class, 'index'])->name('admin.kategori.index');
     Route::get('/kategori/create', [KategoriController::class, 'create'])->name('admin.kategori.create');
     Route::post('/kategori', [KategoriController::class, 'store'])->name('admin.kategori.store');
@@ -26,4 +26,4 @@ Route::prefix('admin')->group(function () {
     Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('admin.kategori.update');
     Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.destroy');
     Route::patch('/kategori/{id}/status', [KategoriController::class, 'toggleStatus'])->name('admin.kategori.toggleStatus');
-});
+
