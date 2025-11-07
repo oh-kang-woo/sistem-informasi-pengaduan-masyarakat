@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\Admin\PengaduanAdminController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -15,6 +17,7 @@ Route::post('/buat-laporan', [PengaduanController::class, 'store'])->name('penga
 
 // Pengaduan (Admin)
 Route::get('/admin/pengaduan', [PengaduanAdminController::class, 'index'])->name('admin.pengaduan.index');
+Route::post('/admin/pengaduan', [PengaduanAdminController::class, 'index'])->name('admin.pengaduan.index1');
 
 
 
@@ -26,4 +29,15 @@ Route::get('/admin/pengaduan', [PengaduanAdminController::class, 'index'])->name
     Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('admin.kategori.update');
     Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.destroy');
     Route::patch('/kategori/{id}/status', [KategoriController::class, 'toggleStatus'])->name('admin.kategori.toggleStatus');
+
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+
+
+
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
 

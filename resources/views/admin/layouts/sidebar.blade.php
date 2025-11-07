@@ -56,11 +56,17 @@
     <div class="mt-auto">
          <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link logout-link" href="#">
+                <a class="nav-link logout-link" href="{{ route('logout') }}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="bi bi-box-arrow-left"></i>
                     Logout
                 </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
             </li>
+
          </ul>
     </div>
 </nav>
