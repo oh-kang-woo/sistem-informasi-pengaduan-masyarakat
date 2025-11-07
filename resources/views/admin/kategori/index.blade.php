@@ -2,7 +2,7 @@
 
 @push('styles')
 <style>
-    /* === Warna dengan gradasi solid === */
+    /* === Warna gradasi (Akan diterapkan di .card-header) === */
     .bg-card-orange { background: linear-gradient(135deg, #f39c12, #f1c40f) !important; color: #fff !important; }
     .bg-card-yellow { background: linear-gradient(135deg, #f1c40f, #f9e79f) !important; color: #000 !important; }
     .bg-card-green  { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; color: #fff !important; }
@@ -10,31 +10,54 @@
     .bg-card-purple { background: linear-gradient(135deg, #8e44ad, #9b59b6) !important; color: #fff !important; }
     .bg-card-gray   { background: linear-gradient(135deg, #7f8c8d, #95a5a6) !important; color: #fff !important; }
 
-    /* === Kustomisasi Kartu === */
+    /* === Kustomisasi Kartu (MODIFIKASI) === */
     .category-card {
         border: none;
         border-radius: 0.75rem;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         transition: all 0.3s ease;
         overflow: hidden;
+        background: #fff !important; /* Kartu utama sekarang putih */
     }
     .category-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     }
 
-    .category-card h5,
-    .category-card p,
-    .category-card .stat-label,
-    .category-card .stat-number {
-        color: inherit !important;
+    /* === Header Kartu (BARU) === */
+    .category-card .card-header {
+        border: none;
+        padding: 1.5rem;
+        position: relative; /* Untuk penempatan ikon */
+        border-radius: 0.75rem 0.75rem 0 0;
+        min-height: 110px; /* Beri tinggi minimum untuk header */
+        display: flex;
+        align-items: flex-start;
     }
 
-    /* CSS untuk angka statistik di kartu */
-    .stat-item { text-align: center; }
-    .stat-number { font-size: 1.5rem; font-weight: 700; display: block; }
-    .stat-label { font-size: 0.8rem; text-transform: uppercase; display: block; opacity: 0.9; }
+    /* === Ikon (MODIFIKASI) === */
+    .category-icon {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        font-size: 1.8rem;
+        line-height: 1;
+        color: inherit; /* Mewarisi warna dari header */
+        opacity: 0.9;
+    }
 
+    /* === Judul & Badge di Header (MODIFIKASI) === */
+    .header-content {
+        margin-left: 55px; /* Jarak dari ikon */
+        width: 100%;
+    }
+    .header-content h5 {
+        color: inherit !important; /* Teks header mewarisi warna */
+        margin-bottom: 0.25rem;
+        padding-top: 2px;
+    }
+
+    /* Badge Status di Header */
     .badge-status {
         font-size: 0.75rem;
         font-weight: 600;
@@ -43,34 +66,47 @@
         background-color: rgba(255,255,255,0.25);
         color: #fff;
     }
-    /* Khusus untuk .bg-card-yellow yang teksnya hitam */
     .bg-card-yellow .badge-status {
         background-color: rgba(0,0,0,0.1);
         color: #000;
     }
-    .bg-card-yellow .stat-number,
-    .bg-card-yellow .stat-label {
-        color: #000 !important;
+
+    /* === Body Kartu (MODIFIKASI) === */
+    .category-card .card-body {
+        padding: 1.5rem;
+        background: #fff;
+        color: #333; /* Teks di body berwarna gelap */
+    }
+    .category-card .card-body p {
+        color: #6c757d; /* Warna deskripsi */
     }
 
+    /* Statistik di Body */
+    .stat-item { text-align: center; }
+    .stat-number { font-size: 1.5rem; font-weight: 700; display: block; color: #212529; }
+    .stat-label { font-size: 0.8rem; text-transform: uppercase; display: block; opacity: 0.9; color: #6c757d; }
 
+    /* === Tombol Aksi di Body (MODIFIKASI) === */
+    /* Tombol sekarang berwarna solid soft */
     .btn-action-edit, .btn-action-hapus {
-        background-color: rgba(255,255,255,0.9);
         font-weight: 600;
+        border: none;
+        border-radius: 0.5rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
     }
-    /* Khusus untuk .bg-card-yellow */
-    .bg-card-yellow .btn-action-edit,
-    .bg-card-yellow .btn-action-hapus {
-        background-color: rgba(0,0,0,0.1);
+    .btn-action-edit {
+        background-color: #e7f1ff; /* Biru muda */
+        color: #0D6EFD;
     }
+    .btn-action-hapus {
+        background-color: #fdefee; /* Merah muda */
+        color: #DC3545;
+    }
+    .btn-action-edit:hover { background-color: #d1e3ff; }
+    .btn-action-hapus:hover { background-color: #fbdce0; }
 
-    .btn-action-edit { color: #0D6EFD; }
-    .btn-action-hapus { color: #DC3545; }
-    .btn-action-edit:hover, .btn-action-hapus:hover {
-        opacity: 0.85;
-    }
-
-    /* === Header === */
+    /* === Header Halaman (Tidak Berubah) === */
     .page-header {
         color: #fff;
         background: linear-gradient(90deg, #2563eb, #06b6d4);
@@ -88,7 +124,6 @@
         <h2 class="h4 fw-bold mb-1">Manajemen Kategori Pengaduan</h2>
         <p class="mb-0 text-white-50">Kelola kategori untuk mengorganisir pengaduan di sistem Jari – Jaga Kendari</p>
     </div>
-    {{-- TOMBOL INI DIUBAH UNTUK MEMBUKA MODAL TAMBAH --}}
     <button type="button" class="btn btn-light shadow-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
         <i class="bi bi-plus-circle-fill me-2"></i> Tambah Kategori
     </button>
@@ -101,7 +136,7 @@
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-muted mb-1">Total Kategori</h6>
-                    <h4 class="fw-bold mb-0">{{ $total_kategori ?? 6 }}</h4> {{-- Ganti dengan var aslimu --}}
+                    <h4 class="fw-bold mb-0">{{ $total_kategori ?? 6 }}</h4>
                 </div>
                 <i class="bi bi-tags-fill fs-2 text-primary"></i>
             </div>
@@ -112,7 +147,7 @@
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-muted mb-1">Aktif</h6>
-                    <h4 class="fw-bold mb-0 text-success">{{ $total_aktif ?? 5 }}</h4> {{-- Ganti dengan var aslimu --}}
+                    <h4 class="fw-bold mb-0 text-success">{{ $total_aktif ?? 5 }}</h4>
                 </div>
                 <i class="bi bi-check-circle-fill fs-2 text-success"></i>
             </div>
@@ -123,7 +158,7 @@
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-muted mb-1">Non-Aktif</h6>
-                    <h4 class="fw-bold mb-0 text-danger">{{ $total_nonaktif ?? 1 }}</h4> {{-- Ganti dengan var aslimu --}}
+                    <h4 class="fw-bold mb-0 text-danger">{{ $total_nonaktif ?? 1 }}</h4>
                 </div>
                 <i class="bi bi-x-circle-fill fs-2 text-danger"></i>
             </div>
@@ -162,13 +197,35 @@
 <div class="row g-4">
     @forelse($kategori_list as $kategori)
         <div class="col-md-6 col-lg-4">
-            <div class="card category-card h-100 {{ $kategori->warna_kelas ?? 'bg-card-gray' }}">
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h5 class="fw-bold mb-0">{{ $kategori->nama_kategori }}</h5>
+
+            {{-- ================================================== --}}
+            {{-- === STRUKTUR KARTU DIPISAH JADI HEADER & BODY === --}}
+            {{-- ================================================== --}}
+
+            <div class="card category-card h-100">
+
+                {{-- Bagian HEADER (Berwarna) --}}
+                <div class="card-header {{ $kategori->warna_kelas ?? 'bg-card-gray' }}">
+
+                    {{-- Ikon --}}
+                    <i class="category-icon
+                        @if ($kategori->warna_kelas == 'bg-card-orange') bi bi-geo-alt-fill
+                        @elseif ($kategori->warna_kelas == 'bg-card-yellow') bi bi-lightbulb-fill
+                        @elseif ($kategori->warna_kelas == 'bg-card-green') bi bi-trash-fill
+                        @elseif ($kategori->warna_kelas == 'bg-card-blue') bi bi-building-fill
+                        @elseif ($kategori->warna_kelas == 'bg-card-purple') bi bi-arrow-down-up
+                        @else bi bi-grid-fill @endif">
+                    </i>
+
+                    {{-- Konten Header (Judul & Badge) --}}
+                    <div class="header-content d-flex justify-content-between align-items-start">
+                        <h5 class="fw-bold">{{ $kategori->nama_kategori }}</h5>
                         <span class="badge-status">{{ strtoupper($kategori->status) }}</span>
                     </div>
+                </div>
 
+                {{-- Bagian BODY (Putih) --}}
+                <div class="card-body d-flex flex-column">
                     <p class="small mb-3">{{ $kategori->deskripsi ?? 'Tidak ada deskripsi.' }}</p>
 
                     <div class="d-flex justify-content-around mb-3">
