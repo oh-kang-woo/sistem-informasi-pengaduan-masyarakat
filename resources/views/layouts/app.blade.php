@@ -13,134 +13,144 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f4f7f6; /* Warna fallback jika gradient tidak didukung */
-        }
+   <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f4f7f6;
+    }
 
-        .main-wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
+    .main-wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
 
-        /* --- Sidebar Styles --- */
-        .sidebar {
-            width: 280px;
-            min-height: 100vh;
-            background-color: #00334E; /* Warna biru tua dari gambar */
-            padding: 1.5rem;
-            color: #ffffff;
-            flex-shrink: 0;
-        }
-        .sidebar-header {
-            margin-bottom: 2rem;
-        }
-        .sidebar-header h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0;
-        }
-        .sidebar-header span {
-            font-size: 0.85rem;
-            color: #a0bacc;
-        }
-        .sidebar .nav-link {
-            color: #d0e0e9;
-            font-size: 0.95rem;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .sidebar .nav-link i {
-            margin-right: 10px;
-            font-size: 1.1rem;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #004a70;
-            color: #ffffff;
-        }
-        .sidebar .nav-link.active {
-            background-color: #005a87;
-            color: #ffffff;
-            font-weight: 500;
-        }
+    /* === SIDEBAR === */
+    .sidebar {
+        position: fixed;            /* tetap di kiri saat scroll */
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100vh;              /* tinggi penuh layar */
+        background-color: #00334E;  /* warna biru tua */
+        padding: 1.5rem;
+        color: #ffffff;
+        flex-shrink: 0;
+        overflow-y: auto;           /* sidebar bisa scroll sendiri */
+        z-index: 1000;
+    }
 
-        /* --- Content Styles --- */
-        .content-wrapper {
-            flex-grow: 1;
-            padding: 2rem;
-            /* Gradient background utama */
-            background-image: linear-gradient(120deg, #00467F, #1ABC9C);
-            overflow-y: auto;
-        }
+    .sidebar-header {
+        margin-bottom: 2rem;
+    }
+    .sidebar-header h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+    .sidebar-header span {
+        font-size: 0.85rem;
+        color: #a0bacc;
+    }
 
-        /* --- Topbar / User Menu --- */
-        .topbar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 2rem;
-        }
-        .user-dropdown .dropdown-toggle {
-            background-color: rgba(255, 255, 255, 0.9);
-            border: none;
-            color: #333;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-weight: 500;
-        }
-        .user-dropdown .dropdown-toggle::after {
-            margin-left: 0.5rem;
-        }
-        .user-dropdown .dropdown-menu {
-            border: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #6c757d;
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 0.5rem;
-            font-weight: 600;
-        }
+    .sidebar .nav-link {
+        color: #d0e0e9;
+        font-size: 0.95rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    .sidebar .nav-link i {
+        margin-right: 10px;
+        font-size: 1.1rem;
+    }
+    .sidebar .nav-link:hover {
+        background-color: #004a70;
+        color: #ffffff;
+    }
+    .sidebar .nav-link.active {
+        background-color: #005a87;
+        color: #ffffff;
+        font-weight: 500;
+    }
 
-        /* --- Form Card Styles --- */
-        .form-card {
-            background-color: #ffffff;
-            border-radius: 1rem;
-            border: none;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
-        }
+    /* === CONTENT AREA === */
+    .content-wrapper {
+        margin-left: 280px; /* supaya tidak ketimpa sidebar */
+        flex-grow: 1;
+        padding: 2rem;
+        background-image: linear-gradient(120deg, #00467F, #1ABC9C);
+        overflow-y: auto;
+    }
 
-        /* --- Custom File Upload --- */
-        .file-drop-zone {
-            border: 2px dashed #ced4da;
-            border-radius: 0.5rem;
-            padding: 2.5rem;
-            text-align: center;
-            cursor: pointer;
-            background-color: #f9fafb;
-            transition: background-color 0.2s;
-        }
-        .file-drop-zone:hover {
-            background-color: #f1f3f5;
-        }
-        .file-drop-zone .file-input {
-            display: none;
-        }
-        .file-drop-zone .file-msg {
-            color: #0d6efd;
-            font-weight: 500;
-        }
+    /* === TOPBAR === */
+    .topbar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 2rem;
+    }
 
-    </style>
+    .user-dropdown .dropdown-toggle {
+        background-color: rgba(255, 255, 255, 0.9);
+        border: none;
+        color: #333;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: 500;
+    }
+    .user-dropdown .dropdown-toggle::after {
+        margin-left: 0.5rem;
+    }
+    .user-dropdown .dropdown-menu {
+        border: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #6c757d;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.5rem;
+        font-weight: 600;
+    }
 
-    
+    /* === FORM CARD === */
+    .form-card {
+        background-color: #ffffff;
+        border-radius: 1rem;
+        border: none;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+    }
+
+    /* === FILE UPLOAD === */
+    .file-drop-zone {
+        border: 2px dashed #ced4da;
+        border-radius: 0.5rem;
+        padding: 2.5rem;
+        text-align: center;
+        cursor: pointer;
+        background-color: #f9fafb;
+        transition: background-color 0.2s;
+    }
+    .file-drop-zone:hover {
+        background-color: #f1f3f5;
+    }
+    .file-drop-zone .file-input {
+        display: none;
+    }
+    .file-drop-zone .file-msg {
+        color: #0d6efd;
+        font-weight: 500;
+    }
+</style>
+
+
+
 </head>
 <body>
 

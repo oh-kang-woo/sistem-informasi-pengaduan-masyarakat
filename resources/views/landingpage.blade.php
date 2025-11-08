@@ -361,7 +361,7 @@
                     <li><a href="#faq">FAQ</a></li>
                 </ul>
             </nav>
-            <a href="#lapor" class="btn btn-primary">Buat Laporan</a>
+            <a href="{{route('pengaduan.create')}}" class="btn btn-primary">Buat Laporan</a>
         </div>
     </header>
 

@@ -52,7 +52,6 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-medium">Upload Bukti (Foto/Dokumen)</label>
                 <label for="Bukti" class="file-drop-zone">
                     <i class="bi bi-cloud-arrow-up fs-1 text-secondary"></i><br>
                     <span class="file-msg">Klik untuk upload</span> atau drag & drop
