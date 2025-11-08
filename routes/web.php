@@ -20,18 +20,16 @@ Route::get('/admin/pengaduan', [PengaduanAdminController::class, 'index'])->name
 Route::post('/admin/pengaduan', [PengaduanAdminController::class, 'index'])->name('admin.pengaduan.index1');
 
 
+Route::get('/kategori', [KategoriController::class, 'index'])->name('admin.kategori.index');
+Route::get('/kategori/create', [KategoriController::class, 'create'])->name('admin.kategori.create');
+Route::post('/kategori', [KategoriController::class, 'store'])->name('admin.kategori.store');
+Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('admin.kategori.edit');
+Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('admin.kategori.update');
+Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.destroy');
+Route::patch('/kategori/{id}/status', [KategoriController::class, 'toggleStatus'])->name('admin.kategori.toggleStatus');
 
-
-    Route::get('/kategori', [KategoriController::class, 'index'])->name('admin.kategori.index');
-    Route::get('/kategori/create', [KategoriController::class, 'create'])->name('admin.kategori.create');
-    Route::post('/kategori', [KategoriController::class, 'store'])->name('admin.kategori.store');
-    Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('admin.kategori.edit');
-    Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('admin.kategori.update');
-    Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.destroy');
-    Route::patch('/kategori/{id}/status', [KategoriController::class, 'toggleStatus'])->name('admin.kategori.toggleStatus');
-
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 
 
 

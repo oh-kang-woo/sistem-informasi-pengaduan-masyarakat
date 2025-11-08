@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Pengaduan;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\View\ViewName;
 
 class PengaduanController extends Controller
 {
+
     // Tampilkan form
     public function create()
     {
-        $kategoris = Kategori::all();
+        $kategoris = Kategori::where('status', true)->get();
         return view('pengaduan.create', compact('kategoris'));
     }
 
