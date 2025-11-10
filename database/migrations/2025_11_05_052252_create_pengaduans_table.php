@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengaduans', function (Blueprint $table) {
+    Schema::create('pengaduans', function (Blueprint $table) {
         $table->id();
-        $table->string('judul');
+        $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
         $table->foreignId('kategori_id')->nullable()->constrained('kategoris')->onDelete('set null');
-        $table->string('lokasi');
+        $table->string('judul_pengaduan');
+        $table->string('lokasi_kejadian');
         $table->text('isi_laporan');
-        $table->string('bukti')->nullable(); // path file bukti upload
-        $table->string('no_hp');
+        $table->string('bukti')->nullable();
         $table->enum('status', ['Menunggu Verifikasi', 'Diproses', 'Selesai'])->default('Menunggu Verifikasi');
         $table->timestamps();
     });

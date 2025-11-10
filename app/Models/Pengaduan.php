@@ -23,4 +23,15 @@ class Pengaduan extends Model
     {
         return $this->belongsTo(Kategori::class);
     }
+
+        public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+    public function notifikasis()
+    {
+        return $this->hasMany(Notifikasi::class);
+    }
 }
