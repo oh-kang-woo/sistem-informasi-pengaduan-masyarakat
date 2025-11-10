@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('admin/notifikasi') ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ Request::is('admin/notifikasi') ? 'active' : '' }}" href="{{route('admin.notifikasi.index')}}">
                     <i class="bi bi-bell-fill"></i>
                     Notifikasi
                 </a>
