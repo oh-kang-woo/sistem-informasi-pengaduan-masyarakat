@@ -25,8 +25,9 @@ Route::post('/logout', function () {
 
 // === PENGADUAN (USER) ===
 
-    Route::get('/buat/laporan', [PengaduanController::class, 'create'])->name('pengaduan.create');
-    Route::post('/buat/laporan/post', [PengaduanController::class, 'store'])->name('pengaduan.store');
+
+Route::get('/buat/laporan', [PengaduanController::class, 'create'])->name('pengaduan.create');
+Route::post('/buat/laporan', [PengaduanController::class, 'store'])->name('pengaduan.store');
 
 
 

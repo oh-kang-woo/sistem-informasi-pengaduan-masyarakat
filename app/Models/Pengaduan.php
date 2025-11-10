@@ -10,12 +10,12 @@ class Pengaduan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'judul',
+        'user_id',
         'kategori_id',
-        'lokasi',
+        'judul_pengaduan',
+        'lokasi_kejadian',
         'isi_laporan',
         'bukti',
-        'no_hp',
         'status'
     ];
 
@@ -24,14 +24,13 @@ class Pengaduan extends Model
         return $this->belongsTo(Kategori::class);
     }
 
-        public function user()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-
     public function notifikasis()
     {
-        return $this->hasMany(Notifikasi::class);
+        return $this->hasMany(Usernotifikasi::class);
     }
 }

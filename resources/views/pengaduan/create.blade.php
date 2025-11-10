@@ -24,8 +24,11 @@
             </div>
         </div>
 
-        <form action="#" method="POST" enctype="multipart/form-data">
-            @csrf <div class="mb-3">
+        {{-- ✅ Perbaikan utama: ubah action ke route POST --}}
+        <form action="{{route('pengaduan.store')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            <div class="mb-3">
                 <label for="judul" class="form-label fw-medium">Judul Pengaduan <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="judul" name="judul" placeholder="Masukkan judul pengaduan Anda" required>
             </div>
@@ -34,30 +37,29 @@
                 <label for="kategori_id" class="form-label fw-medium">Kategori Pengaduan <span class="text-danger">*</span></label>
                 <select class="form-select" id="kategori_id" name="kategori_id" required>
                     <option value="" selected disabled>Pilih Kategori</option>
-
                     @foreach($kategoris as $kategori)
                         <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
                     @endforeach
-
                 </select>
             </div>
+
             <div class="mb-3">
                 <label for="lokasi" class="form-label fw-medium">Lokasi Kejadian <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="Contoh: Jl. Ahmad Yani, Kelurahan Mandonga" required>
             </div>
 
             <div class="mb-3">
-                <label for="isi_Laporan" class="form-label fw-medium">Isi Laporan <span class="text-danger">*</span></label>
-                <textarea class="form-control" id="isi_Laporan" name="isi_laporan" rows="5" placeholder="Jelaskan secara detail pengaduan Anda..." required></textarea>
+                <label for="isi_laporan" class="form-label fw-medium">Isi Laporan <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="isi_laporan" name="isi_laporan" rows="5" placeholder="Jelaskan secara detail pengaduan Anda..." required></textarea>
             </div>
 
             <div class="mb-3">
-                <label for="Bukti" class="file-drop-zone">
+                <label for="bukti" class="file-drop-zone">
                     <i class="bi bi-cloud-arrow-up fs-1 text-secondary"></i><br>
                     <span class="file-msg">Klik untuk upload</span> atau drag & drop
                     <br>
                     <small class="text-muted">Format JPG, PNG, PDF (Max 5MB)</small>
-                    <input type="file" class="file-input" id="Bukti" name="bukti" multiple>
+                    <input type="file" class="file-input" id="bukti" name="bukti">
                 </label>
             </div>
 
@@ -90,8 +92,8 @@
 
 @push('scripts')
 <script>
-    // Script sederhana untuk menampilkan nama file (jika diperlukan)
-    const fileInput = document.getElementById('uploadBukti');
+    // ✅ Perbaikan: pakai id yang benar sesuai input file
+    const fileInput = document.getElementById('bukti');
     const fileMsg = document.querySelector('.file-msg');
 
     fileInput.addEventListener('change', () => {
