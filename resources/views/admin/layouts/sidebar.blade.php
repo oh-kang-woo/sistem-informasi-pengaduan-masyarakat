@@ -13,7 +13,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::is(  'admin/laporan') ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ Request::is(  'admin/laporan') ? 'active' : '' }}" href="{{ route('admin.laporan.index') }}">
                     <i class="bi bi-journal-text"></i>
                     Manajemen laporan
                 </a>

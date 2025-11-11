@@ -35,6 +35,11 @@ Route::post('/buat/laporan', [PengaduanController::class, 'store'])->name('penga
     Route::get('/pengaduan', [PengaduanAdminController::class, 'index'])->name('admin.pengaduan.index');
     Route::post('/pengaduan', [PengaduanAdminController::class, 'index'])->name('admin.pengaduan.index1');
 
+    Route::get('/manajemen/pengaduan', [PengaduanAdminController::class, 'manajemen'])->name('admin.laporan.index');
+
+    Route::patch('/admin/pengaduan/{id}/update-status', [PengaduanAdminController::class, 'updateStatus'])
+    ->name('admin.pengaduan.updateStatus');
+
     Route::get('/kategori', [KategoriController::class, 'index'])->name('admin.kategori.index');
     Route::get('/kategori/create', [KategoriController::class, 'create'])->name('admin.kategori.create');
     Route::post('/kategori', [KategoriController::class, 'store'])->name('admin.kategori.store');

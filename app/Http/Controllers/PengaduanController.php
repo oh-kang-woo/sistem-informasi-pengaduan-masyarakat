@@ -63,4 +63,5 @@ class PengaduanController extends Controller
         return redirect()->back()->with('success', 'Laporan berhasil dikirim!');
     }
 
+    
 }
