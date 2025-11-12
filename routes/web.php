@@ -15,13 +15,13 @@ Route::get('/', function () {
     return view('landingpage');
 });
 
-// === AUTH ===
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/login');
-})->name('logout');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // === PENGADUAN (USER) ===
 
@@ -32,7 +32,7 @@ Route::post('/buat/laporan', [PengaduanController::class, 'store'])->name('penga
 
 
     // Pengaduan (Admin)
-    Route::get('/pengaduan', [PengaduanAdminController::class, 'index'])->name('admin.pengaduan.index');
+    Route::get('/pengaduan', [PengaduanAdminController::class, 'index'])->name('admin.index');
     Route::post('/pengaduan', [PengaduanAdminController::class, 'index'])->name('admin.pengaduan.index1');
 
     Route::get('/manajemen/pengaduan', [PengaduanAdminController::class, 'manajemen'])->name('admin.laporan.index');

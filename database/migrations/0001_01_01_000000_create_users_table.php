@@ -11,12 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('users', function (Blueprint $table) {
-                $table->id();
-                $table->string('nama')->nullable(); // nama opsional
-                $table->string('no_hp')->unique();  // tetap wajib dan unik
-                $table->timestamps();
+            $table->id();
+            $table->string('nama')->nullable();
+            $table->string('email')->unique();       // identitas login utama
+            $table->string('no_hp')->nullable();     // opsional
+            $table->string('password');              // untuk autentikasi
+            $table->enum('role', ['user', 'admin'])->default('user'); // role system
+            $table->rememberToken();                 // untuk "remember me"
+            $table->timestamps();
         });
+
 
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

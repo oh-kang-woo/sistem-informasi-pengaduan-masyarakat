@@ -7,7 +7,7 @@
         <ul class="nav flex-column">
             <span class="nav-heading">MENU</span>
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}" href="{{route('admin.pengaduan.index')}}">
+                <a class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}" href="{{route('admin.index')}}">
                     <i class="bi bi-speedometer2"></i>
                     Dashboard
                 </a>

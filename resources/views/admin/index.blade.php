@@ -50,7 +50,7 @@
 {{-- Filter --}}
 <div class="card shadow-sm border-0">
     <div class="card-body p-4">
-        <form action="{{ route('admin.pengaduan.index') }}" method="GET">
+        <form action="{{ route('admin.index') }}" method="GET">
             <div class="row g-3">
                 <div class="col-md-4">
                     <label class="form-label fw-medium">Status</label>
