@@ -27,8 +27,8 @@ class PengaduanAdminController extends Controller
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('judul', 'like', "%$search%")
-                  ->orWhere('lokasi', 'like', "%$search%");
+                $q->where('judul_laporan', 'like', "%$search%")
+                  ->orWhere('lokasi_kejadian', 'like', "%$search%");
             });
         }
 

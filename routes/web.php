@@ -27,7 +27,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::get('/buat/laporan', [PengaduanController::class, 'create'])->name('pengaduan.create');
-Route::post('/buat/laporan', [PengaduanController::class, 'store'])->name('pengaduan.store');
+Route::post('/buat/laporan', [PengaduanController::class, 'store'])->middleware('auth')
+    ->name('pengaduan.store');
+
 
 
 

@@ -110,13 +110,13 @@
                     @foreach ($pengaduans as $no => $laporan)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ $laporan->judul }}</td>
+                            <td>{{ $laporan->judul_pengaduan }}</td>
                             <td>{{ $laporan->kategori->nama_kategori ?? '-' }}</td>
                             <td>{{ $laporan->created_at->format('d M Y') }}</td>
                             <td>
                                 @if ($laporan->status == 'Menunggu Verifikasi')
                                     <span class="badge bg-warning text-dark">Menunggu</span>
-                                @elseif ($laporan->status == 'Sedang Diproses')
+                                @elseif ($laporan->status == 'Diproses')
                                     <span class="badge bg-info text-dark">Diproses</span>
                                 @elseif ($laporan->status == 'Selesai')
                                     <span class="badge bg-success">Selesai</span>
@@ -127,7 +127,8 @@
                             <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
                         </tr>
                     @endforeach
-                </tbody>
+</tbody>
+
             </table>
         @else
             <p class="text-center text-muted">Belum ada data laporan.</p>

@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('nama')->nullable();
-            $table->string('email')->unique();       // identitas login utama
+            $table->string('email')->nullable()->unique();       // identitas login utama
             $table->string('no_hp')->nullable();     // opsional
             $table->string('password');              // untuk autentikasi
             $table->enum('role', ['user', 'admin'])->default('user'); // role system
