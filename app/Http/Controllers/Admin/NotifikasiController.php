@@ -2,54 +2,48 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Notifikasi;
+use App\Http\Controllers\Controller;
+use App\Models\Usernotifikasi;
 
 class NotifikasiController extends Controller
 {
-    // Menampilkan semua notifikasi
-public function index()
-{
-    $notifikasis = Notifikasi::latest()->get();
-
-    return view('admin.notifikasi.index', [
-        'notifikasis' => $notifikasis,
-        'total' => Notifikasi::count(),
-        'belum_dibaca' => Notifikasi::where('status', 'belum_dibaca')->count(),
-        'hari_ini' => Notifikasi::whereDate('created_at', now()->toDateString())->count(),
-        'gagal' => 0, // bisa nanti diisi logic real kalau ada log gagal kirim
-    ]);
-}
-
-
-    // Tandai satu notifikasi sudah dibaca
-    public function markAsRead($id)
+    public function index()
     {
-        $notif = Notifikasi::findOrFail($id);
-        $notif->update(['status' => 'dibaca']);
+        $notifications = Usernotifikasi::whereHas('user', fn($q) => $q->where('role', 'admin'))
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        return redirect()->back()->with('success', 'Notifikasi telah ditandai sebagai dibaca.');
+        $total = $notifications->count();
+        $belum_dibaca = $notifications->where('status', 'belum_dibaca')->count();
+        $hari_ini = $notifications->filter(fn($n) => $n->created_at->isToday())->count();
+        $gagal = 0;
+
+        return view('admin.notifikasi.index', compact('notifications', 'total', 'belum_dibaca', 'hari_ini', 'gagal'));
     }
 
-    // Hapus satu notifikasi
-    public function destroy($id)
+    public function read(Usernotifikasi $notification)
     {
-        Notifikasi::findOrFail($id)->delete();
-        return redirect()->back()->with('success', 'Notifikasi berhasil dihapus.');
+        $notification->update(['status' => 'dibaca']);
+        return back()->with('success', 'Notifikasi telah dibaca.');
     }
 
-    // Tandai semua notifikasi sudah dibaca
-    public function markAllRead()
+    public function destroy(Usernotifikasi $notification)
     {
-        Notifikasi::where('status', 'belum_dibaca')->update(['status' => 'dibaca']);
-        return redirect()->back()->with('success', 'Semua notifikasi telah ditandai dibaca.');
+        $notification->delete();
+        return back()->with('success', 'Notifikasi berhasil dihapus.');
     }
 
-    // Hapus semua notifikasi
-    public function destroyAll()
+    public function readAll()
     {
-        Notifikasi::truncate();
-        return redirect()->back()->with('success', 'Semua notifikasi telah dihapus.');
+        Usernotifikasi::whereHas('user', fn($q) => $q->where('role','admin'))
+            ->update(['status' => 'dibaca']);
+        return back()->with('success', 'Semua notifikasi telah dibaca.');
+    }
+
+    public function deleteAll()
+    {
+        Usernotifikasi::whereHas('user', fn($q) => $q->where('role','admin'))->delete();
+        return back()->with('success', 'Semua notifikasi berhasil dihapus.');
     }
 }

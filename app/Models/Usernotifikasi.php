@@ -2,21 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Database\Eloquent\Model;
 
 class Usernotifikasi extends Model
 {
-      use HasFactory;
-
-    protected $fillable = [
-        'user_id',
-        'pengaduan_id',
-        'judul',
-        'pesan',
-        'status',
-    ];
+    use HasFactory;
+    protected $fillable = ['user_id','pengaduan_id','judul','pesan','status'];
 
     public function user()
     {

@@ -1,8 +1,9 @@
-@extends('admin.layouts.app')
+@extends('user.layouts.app')
 
-@section('title', 'Notifikasi Admin')
+@section('title', 'Notifikasi Saya')
 
 @push('styles')
+<!-- Bisa pakai style yang sama dengan admin -->
 <style>
 body { background-color: #f7f9fc; font-family: 'Inter', sans-serif; }
 .header-card { background: #fff; border-radius: 16px; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
@@ -17,9 +18,6 @@ body { background-color: #f7f9fc; font-family: 'Inter', sans-serif; }
 .stat-green { background: #eafaf1; color: #28a745; }
 .stat-yellow { background: #fffbea; color: #ffc107; }
 .stat-red { background: #fdecea; color: #dc3545; }
-.filter-btn { border: none; background: #e9ecef; border-radius: 10px; padding: 6px 14px; margin: 5px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
-.filter-btn:hover { background: #dee2e6; }
-.filter-btn.active { background: #0d6efd; color: #fff; }
 .notif-box { background: #fff; border-radius: 16px; padding: 1.5rem; box-shadow: 0 3px 8px rgba(0,0,0,0.05); }
 .notif-item { display: flex; justify-content: space-between; align-items: start; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0; }
 .notif-item:last-child { border-bottom: none; }
@@ -35,18 +33,16 @@ body { background-color: #f7f9fc; font-family: 'Inter', sans-serif; }
 @section('content')
 <div class="header-card">
     <div>
-        <h4>📢 Notifikasi Admin</h4>
-        <p>Kelola semua notifikasi untuk admin</p>
+        <h4>📢 Notifikasi Saya</h4>
+        <p>Notifikasi terbaru untuk Anda</p>
     </div>
     <div>
-       <form action="{{ route('admin.notifikasi.readAll') }}" method="POST" class="d-inline">
-        <form action="{{ route('admin.notifikasi.readAll') }}" method="POST" class="d-inline">
+        <form action="{{ route('user.notifikasi.readAll') }}" method="POST" class="d-inline">
             @csrf
             @method('PATCH')
             <button class="btn btn-outline-secondary me-2">Tandai Semua Dibaca</button>
         </form>
-
-        <form action="{{ route('admin.notifikasi.deleteAll') }}" method="POST" class="d-inline">
+        <form action="{{ route('user.notifikasi.deleteAll') }}" method="POST" class="d-inline">
             @csrf
             @method('DELETE')
             <button class="btn btn-outline-danger">Hapus Semua</button>
@@ -108,13 +104,13 @@ body { background-color: #f7f9fc; font-family: 'Inter', sans-serif; }
             </div>
             <div class="notif-actions">
                 @if($notif->status === 'belum_dibaca')
-                <form action="{{ route('admin.notifikasi.read', $notif->id) }}" method="POST" class="d-inline">
+                <form action="{{ route('user.notifikasi.read', $notif->id) }}" method="POST" class="d-inline">
                     @csrf
                     @method('PATCH')
                     <button class="btn btn-sm btn-success">Tandai Dibaca</button>
                 </form>
                 @endif
-                <form action="{{ route('admin.notifikasi.destroy', $notif->id) }}" method="POST" class="d-inline">
+                <form action="{{ route('user.notifikasi.destroy', $notif->id) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-sm btn-outline-danger">Hapus</button>

@@ -20,4 +20,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function notifikasis()
+    {
+    return $this->hasMany(Usernotifikasi::class);
+    }
+
 }

@@ -50,8 +50,9 @@
 {{-- Filter --}}
 <div class="card shadow-sm border-0">
     <div class="card-body p-4">
-        <form action="{{ route('admin.pengaduan.index') }}" method="GET">
+        <form action="{{ route('admin.index') }}" method="GET">
             <div class="row g-3">
+
                 <div class="col-md-4">
                     <label class="form-label fw-medium">Status</label>
                     <select name="status" class="form-select">
@@ -90,9 +91,19 @@
 
 {{-- Daftar Laporan --}}
 <div class="card shadow-sm border-0 mt-4">
-    <div class="card-header bg-white py-3">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Daftar Laporan Masuk</h5>
+
+        {{-- Tombol Hapus Semua --}}
+        <form action="{{ route('admin.pengaduan.deleteAll') }}" method="POST" onsubmit="return confirm('Yakin hapus semua laporan?')" class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-trash"></i> Hapus Semua
+            </button>
+        </form>
     </div>
+
     <div class="card-body">
         @if ($pengaduans->count())
             <table class="table table-hover align-middle">
@@ -110,37 +121,50 @@
                     @foreach ($pengaduans as $no => $laporan)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ $laporan->judul }}</td>
+                            <td>{{ $laporan->judul_pengaduan }}</td>
                             <td>{{ $laporan->kategori->nama_kategori ?? '-' }}</td>
                             <td>{{ $laporan->created_at->format('d M Y') }}</td>
                             <td>
                                 @if ($laporan->status == 'Menunggu Verifikasi')
-    <span class="badge bg-warning text-dark">Menunggu</span>
-@elseif ($laporan->status == 'Diproses')
-    <span class="badge bg-info text-dark">Diproses</span>
-@elseif ($laporan->status == 'Selesai')
-    <span class="badge bg-success">Selesai</span>
-@endif
-
+                                    <span class="badge bg-warning text-dark">Menunggu</span>
+                                @elseif ($laporan->status == 'Diproses')
+                                    <span class="badge bg-info text-dark">Diproses</span>
+                                @elseif ($laporan->status == 'Selesai')
+                                    <span class="badge bg-success">Selesai</span>
+                                @elseif ($laporan->status == 'Ditolak')
+                                    <span class="badge bg-danger">Ditolak</span>
+                                @endif
                             </td>
                             <td>
-    <div class="btn-group">
-        <a href="#" class="btn btn-sm btn-primary">Detail</a>
-        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown"></button>
-        <ul class="dropdown-menu">
-            @foreach (['Menunggu Verifikasi', 'Diproses', 'Selesai'] as $status)
-                <li>
-                    <form action="{{ route('admin.pengaduan.updateStatus', $laporan->id) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" name="status" value="{{ $status }}">
-                        <button type="submit" class="dropdown-item">{{ $status }}</button>
-                    </form>
-                </li>
-            @endforeach
-        </ul>
-    </div>
-</td>
+                                <div class="btn-group">
+                                    <a href="#" class="btn btn-sm btn-primary">Detail</a>
+
+                                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                                    <ul class="dropdown-menu">
+                                        @foreach (['Menunggu Verifikasi', 'Diproses', 'Selesai', 'Ditolak'] as $status)
+                                            <li>
+                                                <form action="{{ route('admin.pengaduan.updateStatus', $laporan->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="status" value="{{ $status }}">
+                                                    <button type="submit" class="dropdown-item">{{ $status }}</button>
+                                                </form>
+                                            </li>
+                                        @endforeach
+                                        <li><hr class="dropdown-divider"></li>
+                                        {{-- Tombol Hapus per laporan --}}
+                                        <li>
+                                            <form action="{{ route('admin.pengaduan.destroy', $laporan->id) }}" method="POST" onsubmit="return confirm('Yakin hapus laporan ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="bi bi-trash"></i> Hapus
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -150,5 +174,4 @@
         @endif
     </div>
 </div>
-
 @endsection

@@ -57,7 +57,7 @@
                     <select name="status" class="form-select">
                         <option value="">Semua Status</option>
                         <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
-                        <option value="Sedang Diproses">Sedang Diproses</option>
+                        <option value="Diproses">Sedang Diproses</option>
                         <option value="Selesai">Selesai</option>
                         <option value="Ditolak">Ditolak</option>
                     </select>
@@ -90,9 +90,10 @@
 
 {{-- Daftar Laporan --}}
 <div class="card shadow-sm border-0 mt-4">
-    <div class="card-header bg-white py-3">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Daftar Laporan Masuk</h5>
     </div>
+
     <div class="card-body">
         @if ($pengaduans->count())
             <table class="table table-hover align-middle">
@@ -103,7 +104,7 @@
                         <th>Kategori</th>
                         <th>Tgl Lapor</th>
                         <th>Status</th>
-                        <th>Aksi</th>
+                        <th>No. HP Pelapor</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -124,11 +125,10 @@
                                     <span class="badge bg-danger">Ditolak</span>
                                 @endif
                             </td>
-                            <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
+                            <td>{{ $laporan->user->no_hp ?? '-' }}</td>
                         </tr>
                     @endforeach
-</tbody>
-
+                </tbody>
             </table>
         @else
             <p class="text-center text-muted">Belum ada data laporan.</p>

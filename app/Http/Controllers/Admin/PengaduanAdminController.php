@@ -35,7 +35,7 @@ class PengaduanAdminController extends Controller
         $pengaduans = $query->latest()->get();
 
         $totalMenunggu = Pengaduan::where('status', 'Menunggu Verifikasi')->count();
-        $totalProses   = Pengaduan::where('status', 'Sedang Diproses')->count();
+        $totalProses   = Pengaduan::where('status', 'Diproses')->count();
         $totalSelesai  = Pengaduan::where('status', 'Selesai')->count();
         $totalDitolak  = Pengaduan::where('status', 'Ditolak')->count();
 
@@ -69,15 +69,15 @@ class PengaduanAdminController extends Controller
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('judul', 'like', "%$search%")
-                  ->orWhere('lokasi', 'like', "%$search%");
+                $q->where('judul_pengaduan', 'like', "%$search%")
+                  ->orWhere('lokasi_kejadian', 'like', "%$search%");
             });
         }
 
         $pengaduans = $query->latest()->get();
 
         $totalMenunggu = Pengaduan::where('status', 'Menunggu Verifikasi')->count();
-        $totalProses   = Pengaduan::where('status', 'Sedang Diproses')->count();
+        $totalProses   = Pengaduan::where('status', 'Diproses')->count();
         $totalSelesai  = Pengaduan::where('status', 'Selesai')->count();
         $totalDitolak  = Pengaduan::where('status', 'Ditolak')->count();
 
@@ -109,4 +109,21 @@ class PengaduanAdminController extends Controller
 
         return redirect()->back()->with('success', 'Status pengaduan berhasil diperbarui.');
     }
+
+        // Hapus satu laporan
+    public function destroy($id)
+    {
+        $laporan = Pengaduan::findOrFail($id);
+        $laporan->delete();
+
+        return redirect()->route('admin.laporan.index')->with('success', 'Laporan berhasil dihapus.');
+    }
+
+    // Hapus semua laporan
+    public function deleteAll()
+    {
+        Pengaduan::query()->delete();
+        return redirect()->route('admin.laporan.index')->with('success', 'Semua laporan berhasil dihapus.');
+    }
+
 }
