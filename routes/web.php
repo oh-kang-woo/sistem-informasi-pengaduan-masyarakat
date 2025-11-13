@@ -70,3 +70,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('admin.kategori.update');
     Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.destroy');
     Route::patch('/kategori/{id}/status', [KategoriController::class, 'toggleStatus'])->name('admin.kategori.toggleStatus');
+
+    ////////////////
