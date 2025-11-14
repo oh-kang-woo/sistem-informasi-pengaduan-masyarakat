@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengaduan;
-use App\Models\Kategori;
-use App\Models\Usernotifikasi;
-use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Pengaduan;
+use App\Models\Kategori;
+use App\Models\UserNotification;
+use App\Models\User;
 
 class PengaduanController extends Controller
 {
-
-
     /**
      * Tampilkan form pengaduan
      */
@@ -27,27 +26,36 @@ class PengaduanController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input
+        $user = auth()->user();
+
         $validated = $request->validate([
             'judul_pengaduan' => 'required|string|max:255',
             'kategori_id' => 'required|exists:kategoris,id',
             'lokasi_kejadian' => 'required|string|max:255',
             'isi_laporan' => 'required|string',
             'bukti' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'no_hp' => 'required|string|max:20|unique:users,no_hp,' . auth()->id(),
+            'no_hp' => 'required|string|max:20',
         ]);
 
-        // Update no_hp user
-        $user = auth()->user();
-        $user->no_hp = $validated['no_hp'];
-        $user->save();
+        // Simpan no_hp user jika belum ada
+        if (!$user->no_hp) {
+            $user->no_hp = $validated['no_hp'];
+            $user->save();
+        } elseif ($validated['no_hp'] !== $user->no_hp) {
+            return back()
+                ->withErrors(['no_hp' => 'Nomor HP tidak boleh diubah.'])
+                ->withInput();
+        }
+
 
         DB::beginTransaction();
         try {
             // Upload bukti jika ada
-            $buktiPath = $request->hasFile('bukti') ? $request->file('bukti')->store('bukti_pengaduan','public') : null;
+            $buktiPath = $request->hasFile('bukti')
+                ? $request->file('bukti')->store('bukti_pengaduan', 'public')
+                : null;
 
-            // Simpan pengaduan
+            // Simpan pengaduan dan ambil hasilnya
             $pengaduan = Pengaduan::create([
                 'user_id' => $user->id,
                 'kategori_id' => $validated['kategori_id'],
@@ -58,33 +66,39 @@ class PengaduanController extends Controller
                 'status' => 'Menunggu Verifikasi',
             ]);
 
-            // Notifikasi untuk user
-            Usernotifikasi::create([
-                'user_id' => $user->id,
-                'pengaduan_id' => $pengaduan->id,
-                'judul' => 'Laporan Anda telah diterima',
-                'pesan' => 'Laporan "' . $validated['judul_pengaduan'] . '" telah dikirim dan sedang menunggu verifikasi.',
-                'status' => 'belum_dibaca',
-            ]);
-
-            // Notifikasi untuk semua admin
+            // notifikasi ke semua admin
             $admins = User::where('role', 'admin')->get();
-            foreach($admins as $admin){
-                Usernotifikasi::create([
-                    'user_id' => $admin->id,
-                    'pengaduan_id' => $pengaduan->id,
-                    'judul' => 'Pengaduan Baru',
-                    'pesan' => 'Ada pengaduan baru: "' . $validated['judul_pengaduan'] . '" dari user ' . $user->nama,
-                    'status' => 'belum_dibaca',
+            foreach ($admins as $admin) {
+                UserNotification::create([
+                    'receiver_id' => $admin->id,
+                    'receiver_role' => 'admin',
+                    'title' => 'Pengaduan Baru',
+                    'message' => $user->name . ' mengirim: ' . $pengaduan->judul_pengaduan,
+                    'link' => route('admin.laporan.show', $pengaduan->id),
+                    'status' => 'unread',
                 ]);
             }
 
-            DB::commit();
-            return redirect()->back()->with('success','Laporan berhasil dikirim!');
+            // notifikasi ke user (konfirmasi terkirim)
+            UserNotification::create([
+                'receiver_id' => $user->id,
+                'receiver_role' => 'user',
+                'title' => 'Pengaduan Terkirim',
+                'message' => 'Pengaduan Anda telah terkirim dan akan diverifikasi oleh admin.',
+                'link' => route('user.notifikasi.index'),
+                'status' => 'unread',
+            ]);
 
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan laporan.']);
+            DB::commit();
+
+            return redirect()
+                ->route('pengaduan.create')
+                ->with('success', 'Pengaduan berhasil dikirim dan admin diberi notifikasi.');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

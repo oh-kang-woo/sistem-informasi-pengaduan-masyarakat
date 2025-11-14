@@ -176,6 +176,14 @@
         color: white;
     }
 
+    .aksi-column {
+        min-width: 210px; /* lebarkan area aksi */
+    }
+    .aksi-buttons {
+        display: flex;
+        align-items: center;
+        gap: 6px; /* jarak antar tombol */
+    }
 
 
 </style>
@@ -219,18 +227,13 @@
                 </div>
             </div>
 
-            <main>
-
-                                @if (session('success'))
+            @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
-                @endif
-
+            @endif
                 @yield('content')
-            </main>
-
         </div>
     </div>
 

@@ -1,54 +1,55 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Usernotifikasi;
+use App\Models\UserNotification;
 
 class NotifikasiController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
+        $userId = auth()->id();
 
-        // Ambil notifikasi milik user yang login
-        $notifications = Usernotifikasi::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
+        $notifications = UserNotification::where('receiver_id', $userId)
+            ->where('receiver_role', 'user')
+            ->latest()
             ->get();
 
-        // Statistik sederhana
-        $total        = $notifications->count();
-        $belum_dibaca = $notifications->where('status', 'belum_dibaca')->count();
-        $hari_ini     = $notifications->whereDate('created_at', now())->count();
-        $gagal        = 0;
+        $total = $notifications->count();
+        $belum_dibaca = $notifications->where('status', 'unread')->count();
+        $hari_ini = $notifications->where('created_at', '>=', now()->startOfDay())->count();
+        $gagal = 0; // kalau mau nanti ditambahkan
 
-        return view('user.notifikasi.index', compact('notifications', 'total', 'belum_dibaca', 'hari_ini', 'gagal'));
+        return view('user.notifikasi.index', compact(
+            'notifications', 'total', 'belum_dibaca', 'hari_ini', 'gagal'
+        ));
     }
 
-    public function read(Usernotifikasi $notification)
-{
-    $notification->update(['status' => 'dibaca']);
-    return back()->with('success', 'Notifikasi telah dibaca.');
-}
+    public function markAsRead($id)
+    {
+        UserNotification::where('id', $id)->update(['status' => 'read']);
+        return back();
+    }
 
-public function destroy(Usernotifikasi $notification)
-{
-    $notification->delete();
-    return back()->with('success', 'Notifikasi berhasil dihapus.');
-}
+    public function markAll()
+    {
+        UserNotification::where('receiver_id', auth()->id())
+            ->where('receiver_role', 'user')
+            ->update(['status' => 'read']);
 
-public function readAll()
-{
-    Usernotifikasi::where('user_id', auth()->id())
-        ->update(['status' => 'dibaca']);
-    return back()->with('success', 'Semua notifikasi telah dibaca.');
-}
+        return back();
+    }
 
-public function deleteAll()
-{
-    Usernotifikasi::where('user_id', auth()->id())->delete();
-    return back()->with('success', 'Semua notifikasi berhasil dihapus.');
-}
+    public function destroy($id)
+    {
+        UserNotification::find($id)->delete();
+        return back();
+    }
 
+    public function deleteAll()
+    {
+        UserNotification::where('receiver_id', auth()->id())->delete();
+        return back();
+    }
 }

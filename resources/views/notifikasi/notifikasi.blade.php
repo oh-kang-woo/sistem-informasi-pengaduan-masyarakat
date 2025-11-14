@@ -23,9 +23,9 @@
     @forelse($notifications as $notif)
         <div class="list-group-item d-flex justify-content-between align-items-center {{ $notif->status == 'belum_dibaca' ? 'bg-light' : '' }}">
             <div>
-                <h6 class="mb-1">{{ $notif->judul ?? 'Notifikasi' }}</h6>
-                <p class="mb-0">{{ $notif->pesan ?? '-' }}</p>
-                <small class="text-muted">{{ $notif->created_at->diffForHumans() }}</small>
+                <h6 class="mb-1">{{$notif->judul}}</h6>
+                <p class="mb-0">{{ $notif->pesan}}</p>
+                <small class="text-muted">{{notif->status_text }}</small>
             </div>
             <div class="d-flex gap-2">
                 @if($notif->status == 'belum_dibaca')

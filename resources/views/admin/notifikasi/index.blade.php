@@ -20,14 +20,14 @@ body { background-color: #f7f9fc; font-family: 'Inter', sans-serif; }
 .filter-btn { border: none; background: #e9ecef; border-radius: 10px; padding: 6px 14px; margin: 5px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
 .filter-btn:hover { background: #dee2e6; }
 .filter-btn.active { background: #0d6efd; color: #fff; }
-.notif-box { background: #fff; border-radius: 16px; padding: 1.5rem; box-shadow: 0 3px 8px rgba(0,0,0,0.05); }
-.notif-item { display: flex; justify-content: space-between; align-items: start; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0; }
+.notif-box { background: #fff; border-radius: 10px; padding: 1.5rem; box-shadow: 0 3px 8px rgba(0,0,0,0.05); }
+.notif-item { display: flex; justify-content: space-between; align-items: auto; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0; }
 .notif-item:last-child { border-bottom: none; }
 .notif-item h6 { margin: 0; font-weight: 600; color: #333; }
 .notif-item p { margin: 0; color: #6c757d; font-size: 0.9rem; }
-.notif-status { padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; }
-.status-belum_dibaca { background: #fff3cd; color: #856404; }
-.status-dibaca { background: #d4edda; color: #155724; }
+.notif-status { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; } /* Bulat kecil tanpa teks */
+.status-belum_dibaca { background: #ffc107; } /* kuning untuk belum dibaca */
+.status-dibaca { background: #28a745; } /* hijau untuk dibaca */
 .notif-actions button { margin-left: 6px; }
 </style>
 @endpush
@@ -39,7 +39,6 @@ body { background-color: #f7f9fc; font-family: 'Inter', sans-serif; }
         <p>Kelola semua notifikasi untuk admin</p>
     </div>
     <div>
-       <form action="{{ route('admin.notifikasi.readAll') }}" method="POST" class="d-inline">
         <form action="{{ route('admin.notifikasi.readAll') }}" method="POST" class="d-inline">
             @csrf
             @method('PATCH')
@@ -102,9 +101,8 @@ body { background-color: #f7f9fc; font-family: 'Inter', sans-serif; }
             <div>
                 <h6>{{ $notif->judul }}</h6>
                 <p>{{ $notif->pesan }}</p>
-                <span class="notif-status status-{{ $notif->status }}">
-                    {{ ucfirst(str_replace('_',' ',$notif->status)) }}
-                </span>
+                <!-- Status badge diubah jadi bulat kecil tanpa teks -->
+                <span class="notif-status status-{{ $notif->status }}"></span>
             </div>
             <div class="notif-actions">
                 @if($notif->status === 'belum_dibaca')

@@ -48,12 +48,28 @@
                 <input type="file" class="form-control" id="bukti" name="bukti" accept=".jpg,.jpeg,.png,.pdf">
                 <small class="text-muted">Format JPG, PNG, PDF (Max 5MB)</small>
             </div>
+            @php
+                $nohp = auth()->user()->no_hp;
+            @endphp
 
             <div class="mb-3">
-                <label for="no_hp" class="form-label fw-medium">Nomor Telepon/WhatsApp <span class="text-danger">*</span></label>
-                <input type="tel" class="form-control" id="no_hp" name="no_hp" placeholder="Contoh: 08123456789" required>
-            </div>
+                <label class="form-label fw-medium">Nomor Telepon/WhatsApp <span class="text-danger">*</span></label>
 
+                @if($nohp)
+                    <!-- User SUDAH punya no_hp → tampil readonly -->
+                    <input type="text" class="form-control" value="{{ $nohp }}" readonly>
+                    <input type="hidden" name="no_hp" value="{{ $nohp }}">
+                @else
+                    <!-- User BARU → boleh isi -->
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="no_hp"
+                        placeholder="Contoh: 08123456789"
+                        required
+                    >
+                @endif
+            </div>
 
             <div class="d-flex justify-content-end gap-2">
                 <button type="reset" class="btn btn-light border">Reset</button>

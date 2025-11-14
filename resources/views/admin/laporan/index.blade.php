@@ -50,7 +50,7 @@
 {{-- Filter --}}
 <div class="card shadow-sm border-0">
     <div class="card-body p-4">
-        <form action="{{ route('admin.index') }}" method="GET">
+        <form action="{{ route('admin.laporan.index') }}" method="GET">
             <div class="row g-3">
 
                 <div class="col-md-4">
@@ -58,7 +58,7 @@
                     <select name="status" class="form-select">
                         <option value="">Semua Status</option>
                         <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
-                        <option value="Sedang Diproses">Sedang Diproses</option>
+                        <option value="Diproses">Sedang Diproses</option>
                         <option value="Selesai">Selesai</option>
                         <option value="Ditolak">Ditolak</option>
                     </select>
@@ -95,13 +95,15 @@
         <h5 class="mb-0">Daftar Laporan Masuk</h5>
 
         {{-- Tombol Hapus Semua --}}
-        <form action="{{ route('admin.pengaduan.deleteAll') }}" method="POST" onsubmit="return confirm('Yakin hapus semua laporan?')" class="d-inline">
+        <form action="{{ route('admin.laporan.deleteAll') }}" method="POST"
+            onsubmit="return confirm('Yakin hapus semua laporan?')" class="d-inline">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-outline-danger btn-sm">
                 <i class="bi bi-trash"></i> Hapus Semua
             </button>
         </form>
+
     </div>
 
     <div class="card-body">
@@ -114,7 +116,7 @@
                         <th>Kategori</th>
                         <th>Tgl Lapor</th>
                         <th>Status</th>
-                        <th>Aksi</th>
+                        <th style="width: 1%; white-space: nowrap;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -136,33 +138,44 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="btn-group">
-                                    <a href="#" class="btn btn-sm btn-primary">Detail</a>
+                                <div class="aksi-buttons">
 
-                                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown"></button>
-                                    <ul class="dropdown-menu">
-                                        @foreach (['Menunggu Verifikasi', 'Diproses', 'Selesai', 'Ditolak'] as $status)
+                                    {{-- Tombol Lihat --}}
+                                  <a href="{{ route('admin.laporan.show', $laporan->id) }}"
+                                    class="btn btn-outline-primary btn-sm">Lihat </a>
+
+                                    {{-- Dropdown Aksi --}}
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                            Detail
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            @foreach (['Menunggu Verifikasi', 'Diproses', 'Selesai', 'Ditolak'] as $status)
+                                                <li>
+                                                   <form action="{{ route('admin.laporan.updateStatus', $laporan->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="hidden" name="status" value="{{ $status }}">
+                                                        <button type="submit" class="dropdown-item">{{ $status }}</button>
+                                                    </form>
+                                                </li>
+                                            @endforeach
+
+                                            <li><hr class="dropdown-divider"></li>
+
                                             <li>
-                                                <form action="{{ route('admin.pengaduan.updateStatus', $laporan->id) }}" method="POST">
+                                               <form action="{{ route('admin.laporan.destroy', $laporan->id) }}" method="POST"
+                                                    onsubmit="return confirm('Yakin hapus laporan ini?')">
                                                     @csrf
-                                                    @method('PATCH')
-                                                    <input type="hidden" name="status" value="{{ $status }}">
-                                                    <button type="submit" class="dropdown-item">{{ $status }}</button>
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-danger">
+                                                        <i class="bi bi-trash"></i> Hapus
+                                                    </button>
                                                 </form>
                                             </li>
-                                        @endforeach
-                                        <li><hr class="dropdown-divider"></li>
-                                        {{-- Tombol Hapus per laporan --}}
-                                        <li>
-                                            <form action="{{ route('admin.pengaduan.destroy', $laporan->id) }}" method="POST" onsubmit="return confirm('Yakin hapus laporan ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger">
-                                                    <i class="bi bi-trash"></i> Hapus
-                                                </button>
-                                            </form>
-                                        </li>
-                                    </ul>
+                                        </ul>
+                                    </div>
+
                                 </div>
                             </td>
                         </tr>
