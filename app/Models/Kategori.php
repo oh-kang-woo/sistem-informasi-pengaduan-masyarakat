@@ -19,8 +19,14 @@ class Kategori extends Model
     ];
 
     public function pengaduans()
-{
-    return $this->hasMany(\App\Models\Pengaduan::class, 'kategori_id');
-}
+    {
+        return $this->hasMany(\App\Models\Pengaduan::class, 'kategori_id');
+    }
+
+    public function timeline()
+    {
+        return $this->hasMany(Timeline::class);
+    }
+
 
 }

@@ -33,6 +33,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ======================================================================
 Route::get('/buat/laporan', [PengaduanController::class,'create'])->name('pengaduan.create');
 Route::post('/buat/laporan', [PengaduanController::class,'store'])->name('pengaduan.store');
+Route::get('/riwayat/pengaduan', [PengaduanController::class, 'riwayat'])->name('pengaduan.riwayat');
+Route::get('/pengaduan/{id}', [PengaduanController::class, 'show'])->name('pengaduan.show');
+Route::patch('/pengaduan/cancel/{id}', [PengaduanController::class, 'cancel'])->name('pengaduan.cancel');
 
 // Notifikasi User
 Route::prefix('user/notifikasi')->name('user.notifikasi.')->group(function () {

@@ -21,9 +21,19 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function pengaduans()
+    {
+        return $this->hasMany(Pengaduan::class, 'user_id');
+    }
+
     public function notifikasis()
     {
-    return $this->hasMany(Usernotifikasi::class);
+        return $this->hasMany(UserNotification::class);
     }
+
+    public function timeline()
+    {
+        return $this->hasMany(Timeline::class);
+}
 
 }

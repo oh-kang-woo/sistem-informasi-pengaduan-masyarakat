@@ -30,6 +30,11 @@ class Pengaduan extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function timeline()
+    {
+        return $this->hasMany(Timeline::class);
+    }
+
 
 
 }
