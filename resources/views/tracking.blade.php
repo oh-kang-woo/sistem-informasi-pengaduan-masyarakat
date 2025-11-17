@@ -86,9 +86,17 @@
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <div>
                                 <span class="fw-bold text-primary">{{ $pengaduan->kode_unik }}</span>
-                                <span class="badge bg-{{ $pengaduan->status=='Menunggu Verifikasi'?'warning':($pengaduan->status=='Sedang Diproses'?'info':($pengaduan->status=='Selesai'?'success':'danger')) }}">
+                                <span class="badge
+                                    @if($pengaduan->status == 'Menunggu Verifikasi') bg-warning text-dark
+                                    @elseif($pengaduan->status == 'Sedang Diproses') bg-info text-dark
+                                    @elseif($pengaduan->status == 'Selesai') bg-success
+                                    @elseif($pengaduan->status == 'Ditolak') bg-danger
+                                    @elseif($pengaduan->status == 'Dibatalkan') bg-secondary
+                                    @endif
+                                ">
                                     {{ $pengaduan->status }}
                                 </span>
+
                                 <h4 class="h5 mt-1 mb-1">{{ $pengaduan->judul_pengaduan }}</h4>
                             </div>
                         </div>

@@ -59,5 +59,17 @@ class NotifikasiController extends Controller
         return redirect()->back()->with('success', 'Semua notifikasi berhasil dihapus.');
     }
 
+    public function destroy($id)
+{
+    $notif = UserNotification::findOrFail($id);
+
+    // Pastikan notifikasi yang dihapus milik admin
+    if ($notif->receiver_role === 'admin') {
+        $notif->delete();
+    }
+
+    return back()->with('success', 'Notifikasi berhasil dihapus.');
+}
+
 
 }

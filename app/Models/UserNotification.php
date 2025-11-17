@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserNotification extends Model
 {
-    protected $table = 'user_notifications';
+    use HasFactory;
 
     protected $fillable = [
         'receiver_id',
@@ -18,7 +18,7 @@ class UserNotification extends Model
         'status',
     ];
 
-    // Blade compatibility
+    // Agar Blade tetap bisa pakai $notif->judul / $notif->pesan
     public function getJudulAttribute() {
         return $this->title;
     }
@@ -27,8 +27,9 @@ class UserNotification extends Model
         return $this->message;
     }
 
-    // Status compatibility
     public function getStatusTextAttribute() {
         return $this->status === 'unread' ? 'belum_dibaca' : 'dibaca';
     }
 }
+
+

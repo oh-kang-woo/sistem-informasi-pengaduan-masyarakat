@@ -9,47 +9,64 @@ use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\Admin\PengaduanAdminController;
 use App\Http\Controllers\Admin\NotifikasiController as AdminNotifikasiController;
 use App\Http\Controllers\NotifikasiController as UserNotifikasiController;
+use App\Http\Controllers\UserController;
 
 // ======================================================================
-// LANDING PAGE
+// LANDING PAGE (public)
 // ======================================================================
-Route::get('/', function () {
-    return view('landingpage');
+Route::get('/', fn() => view('landingpage'));
+
+
+// ======================================================================
+// AUTH (guest only)
+// ======================================================================
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 });
 
-// ======================================================================
-// AUTH
-// ======================================================================
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ======================================================================
-// USER ROUTES
+// LOGOUT (auth only)
 // ======================================================================
-Route::get('/buat/laporan', [PengaduanController::class,'create'])->name('pengaduan.create');
-Route::post('/buat/laporan', [PengaduanController::class,'store'])->name('pengaduan.store');
-Route::get('/riwayat/pengaduan', [PengaduanController::class, 'riwayat'])->name('pengaduan.riwayat');
-Route::get('/pengaduan/{id}', [PengaduanController::class, 'show'])->name('pengaduan.show');
-Route::patch('/pengaduan/cancel/{id}', [PengaduanController::class, 'cancel'])->name('pengaduan.cancel');
+Route::middleware('auth')->post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Notifikasi User
-Route::prefix('user/notifikasi')->name('user.notifikasi.')->group(function () {
-    Route::get('/', [UserNotifikasiController::class, 'index'])->name('index');
-    Route::patch('/read/{id}', [UserNotifikasiController::class, 'markAsRead'])->name('read');
-    Route::patch('/read-all', [UserNotifikasiController::class, 'markAll'])->name('readAll');
-    Route::delete('/delete/{id}', [UserNotifikasiController::class, 'destroy'])->name('destroy');
-    Route::delete('/delete-all', [UserNotifikasiController::class, 'deleteAll'])->name('deleteAll');
+
+// ======================================================================
+// USER ROUTES (auth + role:user)
+// ======================================================================
+Route::middleware(['auth', 'role:user'])->group(function () {
+
+    Route::get('/dashboard-user', [UserController::class, 'userDashboard'])->name('dashboard.user');
+
+    Route::prefix('buat/laporan')->group(function () {
+        Route::get('/', [PengaduanController::class, 'create'])->name('pengaduan.create');
+        Route::post('/', [PengaduanController::class, 'store'])->name('pengaduan.store');
+    });
+
+    Route::get('/riwayat/pengaduan', [PengaduanController::class, 'riwayat'])->name('pengaduan.riwayat');
+    Route::get('/pengaduan/{id}', [PengaduanController::class, 'show'])->name('pengaduan.show');
+    Route::patch('/pengaduan/cancel/{id}', [PengaduanController::class, 'cancel'])->name('pengaduan.cancel');
+
+    // === Notifikasi User ===
+    Route::prefix('user/notifikasi')->name('user.notifikasi.')->group(function () {
+        Route::get('/', [UserNotifikasiController::class, 'index'])->name('index');
+        Route::post('/mark-as-read/{id}', [UserNotifikasiController::class, 'markAsRead'])->name('markAsRead');
+        Route::post('/mark-all', [UserNotifikasiController::class, 'markAll'])->name('markAll');
+        Route::delete('/delete/{id}', [UserNotifikasiController::class, 'destroy'])->name('destroy');
+        Route::delete('/delete-all', [UserNotifikasiController::class, 'deleteAll'])->name('deleteAll');
+    });
+
 });
 
+
 // ======================================================================
-// ADMIN ROUTES
+// ADMIN ROUTES (auth + role:admin)
 // ======================================================================
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
 
     // === Dashboard ===
     Route::get('/dashboard', [PengaduanAdminController::class, 'index'])->name('index');
@@ -63,26 +80,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/delete-all', [AdminNotifikasiController::class, 'deleteAll'])->name('deleteAll');
     });
 
-    // === Pengaduan / Laporan ===
+    // === Pengaduan Admin ===
     Route::prefix('laporan')->name('laporan.')->group(function () {
-
-        // Halaman daftar laporan
         Route::get('/', [PengaduanAdminController::class, 'manajemen'])->name('index');
-
-        // Detail laporan
         Route::get('/show/{id}', [PengaduanAdminController::class, 'show'])->name('show');
-
-        // Update status
         Route::patch('/status/{id}', [PengaduanAdminController::class, 'updateStatus'])->name('updateStatus');
-
-        // Hapus satu laporan
         Route::delete('/delete/{id}', [PengaduanAdminController::class, 'destroy'])->name('destroy');
-
-        // Hapus semua laporan
         Route::delete('/delete-all', [PengaduanAdminController::class, 'deleteAll'])->name('deleteAll');
     });
 
-    // === Kategori Pengaduan ===
+    // === Kategori ===
     Route::prefix('kategori')->name('kategori.')->group(function () {
         Route::get('/', [KategoriController::class, 'index'])->name('index');
         Route::get('/create', [KategoriController::class, 'create'])->name('create');
@@ -92,4 +99,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{id}', [KategoriController::class, 'destroy'])->name('destroy');
         Route::patch('/{id}/status', [KategoriController::class, 'toggleStatus'])->name('toggleStatus');
     });
+
 });

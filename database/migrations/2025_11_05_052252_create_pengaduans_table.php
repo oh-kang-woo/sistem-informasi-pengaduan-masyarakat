@@ -19,7 +19,7 @@ return new class extends Migration
         $table->string('lokasi_kejadian');
         $table->text('isi_laporan');
         $table->string('bukti')->nullable();
-        $table->enum('status', ['Menunggu Verifikasi', 'Diproses', 'Selesai','Ditolak',])->default('Menunggu Verifikasi');
+        $table->enum('status', ['Menunggu Verifikasi', 'Diproses', 'Selesai','Ditolak','Dibatalkan'])->default('Menunggu Verifikasi');
         $table->timestamps();
     });
 

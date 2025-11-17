@@ -121,9 +121,12 @@
                                     <span class="badge bg-info text-dark">Diproses</span>
                                 @elseif ($laporan->status == 'Selesai')
                                     <span class="badge bg-success">Selesai</span>
+                                @elseif ($laporan->status == 'Dibatalkan')
+                                    <span class="badge bg-secondary text-dark">Dibatalkan</span>
                                 @else
                                     <span class="badge bg-danger">Ditolak</span>
                                 @endif
+
                             </td>
                             <td>{{ $laporan->user->no_hp ?? '-' }}</td>
                         </tr>

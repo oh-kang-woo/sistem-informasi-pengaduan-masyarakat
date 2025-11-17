@@ -35,13 +35,17 @@
             </li>
 
             {{-- Notifikasi --}}
-            <li class="nav-item">
-                <a class="nav-link {{ Request::is('admin/notifikasi') ? 'active' : '' }}"
-                   href="{{ route('admin.notifikasi.index') }}">
+           <li class="nav-item">
+                <a class="nav-link {{ Request::is('admin/notifikasi*') ? 'active' : '' }}"
+                href="{{ route('admin.notifikasi.index') }}">
                     <i class="bi bi-bell-fill"></i>
                     Notifikasi
+                    @if(isset($notifikasiCount) && $notifikasiCount > 0)
+                        <span class="badge bg-danger ms-1">{{ $notifikasiCount }}</span>
+                    @endif
                 </a>
             </li>
+
 
             {{-- Laporan Cetak (optional) --}}
             <li class="nav-item">

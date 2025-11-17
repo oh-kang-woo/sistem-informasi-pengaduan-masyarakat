@@ -7,6 +7,7 @@ use App\Models\UserNotification;
 
 class NotifikasiController extends Controller
 {
+
     public function index()
     {
         $userId = auth()->id();
@@ -17,14 +18,28 @@ class NotifikasiController extends Controller
             ->get();
 
         $total = $notifications->count();
-        $belum_dibaca = $notifications->where('status', 'unread')->count();
-        $hari_ini = $notifications->where('created_at', '>=', now()->startOfDay())->count();
-        $gagal = 0; // kalau mau nanti ditambahkan
+        $belumDibaca = $notifications->where('status', 'unread')->count();
 
-        return view('user.notifikasi.index', compact(
-            'notifications', 'total', 'belum_dibaca', 'hari_ini', 'gagal'
+        // Perlu tindakan → notifikasi dari pengaduan yang sedang diproses atau menunggu
+        $perluTindakan = $notifications->filter(function ($n) {
+            $keywords = ['menunggu', 'diproses', 'ditolak']; // status pengaduan
+            foreach ($keywords as $word) {
+                if (str_contains(strtolower($n->judul), $word) || str_contains(strtolower($n->pesan), $word)) {
+                    return true;
+                }
+            }
+            return false;
+        })->count();
+
+        return view('notifikasi', compact(
+            'notifications',
+            'total',
+            'belumDibaca',
+            'perluTindakan'
         ));
     }
+
+
 
     public function markAsRead($id)
     {

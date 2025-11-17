@@ -126,17 +126,33 @@
                             <td>{{ $laporan->judul_pengaduan }}</td>
                             <td>{{ $laporan->kategori->nama_kategori ?? '-' }}</td>
                             <td>{{ $laporan->created_at->format('d M Y') }}</td>
-                            <td>
-                                @if ($laporan->status == 'Menunggu Verifikasi')
-                                    <span class="badge bg-warning text-dark">Menunggu</span>
-                                @elseif ($laporan->status == 'Diproses')
-                                    <span class="badge bg-info text-dark">Diproses</span>
-                                @elseif ($laporan->status == 'Selesai')
-                                    <span class="badge bg-success">Selesai</span>
-                                @elseif ($laporan->status == 'Ditolak')
-                                    <span class="badge bg-danger">Ditolak</span>
-                                @endif
+                           <td>
+                                @switch($laporan->status)
+                                    @case('Menunggu Verifikasi')
+                                        <span class="badge bg-warning text-dark">Menunggu</span>
+                                        @break
+
+                                    @case('Diproses')
+                                        <span class="badge bg-info text-dark">Diproses</span>
+                                        @break
+
+                                    @case('Selesai')
+                                        <span class="badge bg-success">Selesai</span>
+                                        @break
+
+                                    @case('Ditolak')
+                                        <span class="badge bg-danger">Ditolak</span>
+                                        @break
+
+                                    @case('Dibatalkan')
+                                        <span class="badge bg-secondary">Dibatalkan</span>
+                                        @break
+
+                                    @default
+                                        <span class="badge bg-dark">-</span>
+                                @endswitch
                             </td>
+
                             <td>
                                 <div class="aksi-buttons">
 

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Pengaduan;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use App\Models\UserNotification;
+use App\Models\User;
 
 class PengaduanAdminController extends Controller
 {
@@ -103,16 +105,50 @@ class PengaduanAdminController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $request->validate([
-            'status' => 'required|in:Menunggu Verifikasi,Diproses,Selesai,Ditolak',
-        ]);
-
         $pengaduan = Pengaduan::findOrFail($id);
+        $oldStatus = $pengaduan->status; // simpan status lama
         $pengaduan->status = $request->status;
         $pengaduan->save();
 
-        return redirect()->back()->with('success', 'Status pengaduan berhasil diperbarui.');
+        // Buat array mapping status ke notifikasi
+        $statusNotif = [
+            'Menunggu Verifikasi' => [
+                'title' => 'Pengaduan Menunggu Verifikasi',
+                'message' => 'Pengaduan Anda "' . $pengaduan->judul_pengaduan . '" sedang menunggu verifikasi admin.'
+            ],
+            'Diproses' => [
+                'title' => 'Pengaduan Sedang Diproses',
+                'message' => 'Pengaduan Anda "' . $pengaduan->judul_pengaduan . '" telah diproses oleh admin.'
+            ],
+            'Selesai' => [
+                'title' => 'Pengaduan Selesai',
+                'message' => 'Pengaduan Anda "' . $pengaduan->judul_pengaduan . '" telah selesai ditindaklanjuti.'
+            ],
+            'Ditolak' => [
+                'title' => 'Pengaduan Ditolak',
+                'message' => 'Pengaduan Anda "' . $pengaduan->judul_pengaduan . '" ditolak oleh admin.'
+            ],
+            'Dibatalkan' => [
+                'title' => 'Pengaduan Dibatalkan',
+                'message' => 'Pengaduan Anda "' . $pengaduan->judul_pengaduan . '" telah dibatalkan.'
+            ],
+        ];
+
+        // Kirim notifikasi ke user jika ada mapping
+        if(isset($statusNotif[$request->status])) {
+            UserNotification::create([
+                'receiver_id' => $pengaduan->user_id,
+                'receiver_role' => 'user',
+                'title' => $statusNotif[$request->status]['title'],
+                'message' => $statusNotif[$request->status]['message'],
+                'link' => route('user.notifikasi.index'),
+                'status' => 'unread',
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Status pengaduan berhasil diubah dan notifikasi terkirim.');
     }
+
 
     public function deleteAll()
 {

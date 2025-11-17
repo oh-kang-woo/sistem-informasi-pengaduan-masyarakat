@@ -10,8 +10,19 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
+    ->withMiddleware(function (Middleware $middleware) {
+
+        // ❌ HAPUS Authenticate dari global middleware
+        // $middleware->append([
+        //     \App\Http\Middleware\Authenticate::class,
+        // ]);
+
+        // Middleware alias saja (dipanggil via route)
+        $middleware->alias([
+            'auth'  => \App\Http\Middleware\Authenticate::class,
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+            'role'  => \App\Http\Middleware\RoleMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

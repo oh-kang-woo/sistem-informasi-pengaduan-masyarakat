@@ -140,22 +140,20 @@ use App\Models\User;
                 'selesai' => Pengaduan::where('user_id', $userId)->where('status', 'Selesai')->count(),
                 'ditolak' => Pengaduan::where('user_id', $userId)->where('status', 'Ditolak')->count(),
             ];
-            
+
             return view('tracking', compact('pengaduanList', 'kategoriOptions', 'stats'));
         }
 
         // Show Detail
         public function show($id)
         {
-            $pengaduan = Pengaduan::with('kategori', 'timeline')
-                ->where('user_id', auth()->id())
-                ->findOrFail($id);
+            $pengaduan = Pengaduan::with(['kategori', 'user'])
+                            ->where('id', $id)
+                            ->firstOrFail();  // ambil 1 data, bukan collection
 
-            $kategoriOptions = Kategori::all(); // optional jika mau di dropdown
-
-            dd($kategoriOptions);
-            return view('   show', compact('pengaduan', 'kategoriOptions'));
+            return view('show', compact('pengaduan'));
         }
+
 
         public function cancel($id)
         {
